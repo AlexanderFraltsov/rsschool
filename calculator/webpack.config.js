@@ -26,6 +26,9 @@ const config = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'eslint-loader',
+        options: {
+          fix: true,
+        },
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
