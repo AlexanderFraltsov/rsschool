@@ -1,0 +1,11 @@
+.select-input {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  margin-top: 20px;
+  width: 150px;
+  &--input{
+    width: 120px;
+    padding-left: 10px;
+  }
+}

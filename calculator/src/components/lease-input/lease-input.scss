@@ -1,0 +1,11 @@
+.text-input {
+  display: flex;
+  flex-flow: column;
+  margin-top: 20px;
+  margin-right: 20px;
+  width: 240px;
+  &--input{
+    width: 120px;
+    padding-left: 10px;
+  }
+}
