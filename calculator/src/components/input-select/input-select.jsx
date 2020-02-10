@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './lease-select.scss';
+import './input-select.scss';
 
-export default class LeaseSelect extends Component {
+export default class InputSelect extends Component {
   PropTypes = {
     label: PropTypes.string,
     defaultValue: PropTypes.number,

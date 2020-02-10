@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import InputWithMask from '../input-with-mask';
-import InputSelect from '../input-select';
+import InputButtons from '../input-buttons';
 
-import './lease.scss';
+import './loan.scss';
 
 export default class Lease extends Component {
   inputs = [
@@ -19,23 +19,25 @@ export default class Lease extends Component {
       mask: '$',
       max: true,
     },
+    { id: 'apr', label: 'Estimated APR', mask: '%' },
   ];
 
-  selects = [
+  buttonRows = [
     {
       id: 'approxCreditScore',
       label: 'Approx. Credit Score',
       availableValues: [600, 650, 700, 750, 800, 850, 900],
     },
-    { id: 'termForMonthLease', label: 'Term (Month)', availableValues: [24, 36, 48] },
     {
-      id: 'annualMiles',
-      label: 'Annual Miles',
-      availableValues: [10000, 12000, 15000],
+      id: 'termForMonthLoan',
+      label: 'Term (Month)',
+      availableValues: [12, 24, 36, 48, 72, 84],
     },
   ];
 
   render() {
+    console.log(this.buttonRows);
+
     const { onChangeInput, defaultValues } = this.props;
     const { msrp } = defaultValues;
     const maxValue = msrp / 4;
@@ -43,7 +45,7 @@ export default class Lease extends Component {
       return (
         <InputWithMask
           key={el.id}
-          id={el.id}
+          id={`${el.id}0`}
           label={el.label}
           defaultValue={defaultValues[el.id]}
           mask={el.mask}
@@ -52,11 +54,11 @@ export default class Lease extends Component {
         />
       );
     });
-    const selects = this.selects.map(el => {
+    const buttonRows = this.buttonRows.map(el => {
       return (
-        <InputSelect
+        <InputButtons
           key={el.id}
-          id={el.id}
+          id={`${el.id}0`}
           label={el.label}
           defaultValue={defaultValues[el.id]}
           availableValues={el.availableValues}
@@ -66,9 +68,9 @@ export default class Lease extends Component {
     });
 
     return (
-      <div className="lease">
-        <div className="lease--inputs">{inputs}</div>
-        <div className="lease--selects">{selects}</div>
+      <div className="loan">
+        <div className="loan--inputs">{inputs}</div>
+        <div className="loan--buttons">{buttonRows}</div>
       </div>
     );
   }
