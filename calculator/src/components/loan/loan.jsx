@@ -4,9 +4,7 @@ import InputButtons from '../input-buttons';
 
 import './loan.scss';
 
-const Lease = ({ onChangeInput, defaultValues, fields }) => {
-  const { msrp } = defaultValues;
-  const maxValue = msrp / 4;
+const Loan = ({ onChangeInput, defaultValues, fields }) => {
   const { zip, tradeInValue, downPayment, apr, approxCreditScore, termForMonthLoan } = fields;
   const inputs = [zip, tradeInValue, downPayment, apr].map(el => {
     return (
@@ -17,7 +15,8 @@ const Lease = ({ onChangeInput, defaultValues, fields }) => {
         defaultValue={defaultValues[el.id]}
         mask={el.mask}
         onChangeInput={onChangeInput}
-        maxValue={el.max ? maxValue : 0}
+        maxValue={el.max}
+        errorMsg={el.errorMsg}
       />
     );
   });
@@ -42,4 +41,4 @@ const Lease = ({ onChangeInput, defaultValues, fields }) => {
   );
 };
 
-export default Lease;
+export default Loan;

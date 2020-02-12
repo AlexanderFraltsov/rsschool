@@ -1,9 +1,10 @@
 .text-input {
+  position: relative;
   display: flex;
   flex-flow: column;
+  width: 260px;
   margin-top: 20px;
   margin-right: 20px;
-  width: 240px;
   &--input{
     width: 120px;
     padding-left: 10px;

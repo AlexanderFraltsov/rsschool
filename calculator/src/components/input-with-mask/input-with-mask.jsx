@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ErrorMessage from '../error-message';
+
 import './input-with-mask.scss';
 
 export default class InputWithMask extends Component {
-  state = { value: '' };
+  state = { value: '', isError: false };
 
   getNewValue = e => {
     const { mask } = this.props;
@@ -19,7 +21,14 @@ export default class InputWithMask extends Component {
     const newValue = this.getNewValue(e);
     if (Number.isNaN(newValue)) return;
     if (maxValue > 0 && newValue > maxValue) {
-      console.log('error text');
+      this.setState({
+        isError: true,
+      });
+      setTimeout(() => {
+        this.setState({
+          isError: false,
+        });
+      }, 3000);
       return;
     }
 
@@ -37,20 +46,22 @@ export default class InputWithMask extends Component {
   };
 
   render() {
-    const { label, defaultValue, mask, id } = this.props;
-    const { value } = this.state;
+    const { label, defaultValue, mask, id, errorMsg } = this.props;
+    const { value, isError } = this.state;
+    const defaultVal = value === 0 ? value : defaultValue;
     return (
       <div className="text-input">
         <label htmlFor={id}>{label}</label>
         <input
           id={id}
           type="text"
-          value={`${mask} ${value || defaultValue}`}
+          value={`${mask} ${value || defaultVal}`}
           onChange={this.onInputChange}
           onBlur={this.onBlur}
           placeholder={defaultValue}
           className="text-input--input"
         />
+        {isError && <ErrorMessage errorMsg={errorMsg} />}
       </div>
     );
   }

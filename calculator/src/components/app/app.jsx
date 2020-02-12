@@ -14,10 +14,14 @@ const TRADE_IN_ID = 'tradeInValue';
 const TRADE_IN_LABEL = 'Trade-in Value';
 const TRADE_IN_MASK = '$';
 const TRADE_IN_DEFAULT_VALUE = 0;
+const TRADE_IN_MAX_VALUE = MSRP / 4;
+const TRADE_IN_ERROR = `$${TRADE_IN_MAX_VALUE} from your trade-in is the maximum value (equal to 1/4 of the MSRP)`;
 const DOWN_PAYMENT_ID = 'downPayment';
 const DOWN_PAYMENT_LABEL = 'Down Payment';
 const DOWN_PAYMENT_MASK = '$';
 const DOWN_PAYMENT_DEFAULT_VALUE = 0;
+const DOWN_PAYMENT_MAX_VALUE = MSRP / 4;
+const DOWN_PAYMENT_ERROR = `$${DOWN_PAYMENT_MAX_VALUE} from your trade-in is the maximum value (equal to 1/4 of the MSRP)`;
 const CREDIT_SCORE_ID = 'approxCreditScore';
 const CREDIT_SCORE_LABEL = 'Approx. Credit Score';
 const CREDIT_SCORE_AVAILABLE_VALUES = [600, 650, 700, 750, 800, 850, 900];
@@ -38,6 +42,8 @@ const APR_ID = 'apr';
 const APR_LABEL = 'Estimated APR';
 const APR_MASK = '%';
 const APR_DEFAULT_VALUE = 0;
+const APR_MAX_VALUE = 200;
+const APR_ERROR = `${APR_MAX_VALUE} % is the maximum value.`;
 
 export default class App extends Component {
   state = {
@@ -50,16 +56,22 @@ export default class App extends Component {
       [TERM_LEASE_ID]: +sessionStorage.getItem(TERM_LEASE_ID) || TERM_LEASE_DEFAULT_VALUE,
       [TERM_LOAN_ID]: +sessionStorage.getItem(TERM_LOAN_ID) || TERM_LOAN_DEFAULT_VALUE,
       [APR_ID]: +sessionStorage.getItem(APR_ID) || APR_DEFAULT_VALUE,
-      msrp: MSRP,
     },
     fields: {
       [ZIP_ID]: { id: ZIP_ID, label: ZIP_LABEL, mask: ZIP_MASK },
-      [TRADE_IN_ID]: { id: TRADE_IN_ID, label: TRADE_IN_LABEL, mask: TRADE_IN_MASK, max: true },
+      [TRADE_IN_ID]: {
+        id: TRADE_IN_ID,
+        label: TRADE_IN_LABEL,
+        mask: TRADE_IN_MASK,
+        max: TRADE_IN_MAX_VALUE,
+        errorMsg: TRADE_IN_ERROR,
+      },
       [DOWN_PAYMENT_ID]: {
         id: DOWN_PAYMENT_ID,
         label: DOWN_PAYMENT_LABEL,
         mask: DOWN_PAYMENT_MASK,
-        max: true,
+        max: DOWN_PAYMENT_MAX_VALUE,
+        errorMsg: DOWN_PAYMENT_ERROR,
       },
       [CREDIT_SCORE_ID]: {
         id: CREDIT_SCORE_ID,
@@ -72,7 +84,13 @@ export default class App extends Component {
         availableValues: TERM_LEASE_AVAILABLE_VALUES,
       },
       [MILES_ID]: { id: MILES_ID, label: MILES_LABEL, availableValues: MILES_AVAILABLE_VALUES },
-      [APR_ID]: { id: APR_ID, label: APR_LABEL, mask: APR_MASK },
+      [APR_ID]: {
+        id: APR_ID,
+        label: APR_LABEL,
+        mask: APR_MASK,
+        max: APR_MAX_VALUE,
+        errorMsg: APR_ERROR,
+      },
       [TERM_LOAN_ID]: {
         id: TERM_LOAN_ID,
         label: TERM_LOAN_LABEL,
@@ -148,9 +166,9 @@ export default class App extends Component {
 
   render() {
     const { values, fields, isLoan } = this.state;
-    const { msrp, zip } = values;
-    const leasePayment = this.getMonthlyPaymentLease(values);
-    const loanPayment = this.getMonthlyPaymentLoan(values);
+    const { zip } = values;
+    const leasePayment = this.getMonthlyPaymentLease({ ...values, msrp: MSRP });
+    const loanPayment = this.getMonthlyPaymentLoan({ ...values, msrp: MSRP });
     const taxes = this.getTaxes(zip);
     return (
       <div className="app">
@@ -162,7 +180,7 @@ export default class App extends Component {
           isLoan={isLoan}
         />
         <InfoCard
-          msrp={msrp}
+          msrp={MSRP}
           monthlyPayment={isLoan ? loanPayment : leasePayment}
           vehicleName={vehicleName}
           dealer={dealer}

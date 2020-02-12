@@ -5,8 +5,6 @@ import InputSelect from '../input-select';
 import './lease.scss';
 
 const Lease = ({ onChangeInput, defaultValues, fields }) => {
-  const { msrp } = defaultValues;
-  const maxValue = msrp / 4;
   const {
     zip,
     tradeInValue,
@@ -24,7 +22,8 @@ const Lease = ({ onChangeInput, defaultValues, fields }) => {
         defaultValue={defaultValues[el.id]}
         mask={el.mask}
         onChangeInput={onChangeInput}
-        maxValue={el.max ? maxValue : 0}
+        maxValue={el.max}
+        errorMsg={el.errorMsg}
       />
     );
   });
