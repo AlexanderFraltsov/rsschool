@@ -164,6 +164,19 @@ export default class App extends Component {
     this.setState({ isLoan });
   };
 
+  getCard = async (prom, isLoan, loanPayment, leasePayment, taxes) => {
+    const res = await prom.then(data => data);
+    return (
+      <InfoCard
+        msrp={res.MSRP}
+        monthlyPayment={isLoan ? loanPayment : leasePayment}
+        vehicleName={res.vehicleName}
+        dealer={res.dealer}
+        taxes={taxes}
+      />
+    );
+  };
+
   render() {
     const { values, fields, isLoan } = this.state;
     const { zip } = values;
