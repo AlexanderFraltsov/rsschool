@@ -3,12 +3,6 @@ import PropTypes from 'prop-types';
 import './input-buttons.scss';
 
 export default class InputButtons extends Component {
-  PropTypes = {
-    label: PropTypes.string,
-    defaultValue: PropTypes.number,
-    availableValues: PropTypes.arrayOf(PropTypes.number),
-  };
-
   onInputChange = e => {
     const { onChangeInput } = this.props;
     let { id } = this.props;
@@ -36,10 +30,18 @@ export default class InputButtons extends Component {
     });
 
     return (
-      <div id={id}>
+      <div className="button-row" id={id}>
         <p>{label}</p>
-        <div className="button-row btn-group">{buttons}</div>
+        <div className="btn-group">{buttons}</div>
       </div>
     );
   }
 }
+
+InputButtons.propTypes = {
+  label: PropTypes.string.isRequired,
+  defaultValue: PropTypes.number.isRequired,
+  availableValues: PropTypes.arrayOf(PropTypes.number).isRequired,
+  id: PropTypes.string.isRequired,
+  onChangeInput: PropTypes.func.isRequired,
+};

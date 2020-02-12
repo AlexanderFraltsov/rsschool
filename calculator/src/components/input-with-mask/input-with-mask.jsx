@@ -3,30 +3,37 @@ import PropTypes from 'prop-types';
 import './input-with-mask.scss';
 
 export default class InputWithMask extends Component {
-  PropTypes = {
-    label: PropTypes.string,
-    defaultValue: PropTypes.any,
-    mask: PropTypes.string,
-  };
-
   state = { value: '' };
 
-  onInputChange = e => {
-    const { mask, onChangeInput, maxValue } = this.props;
-    let { id } = this.props;
+  getNewValue = e => {
+    const { mask } = this.props;
     let newValue = e.target.value;
     if (mask && newValue.includes(mask)) {
       newValue = newValue.replace(mask, '');
     }
-    newValue = +newValue;
+    return +newValue;
+  };
+
+  onInputChange = e => {
+    const { maxValue } = this.props;
+    const newValue = this.getNewValue(e);
     if (Number.isNaN(newValue)) return;
-    if (maxValue > 0 && newValue > maxValue) return;
+    if (maxValue > 0 && newValue > maxValue) {
+      console.log('error text');
+      return;
+    }
 
     this.setState({
-      value: +newValue,
+      value: newValue,
     });
+  };
+
+  onBlur = e => {
+    const newValue = this.getNewValue(e);
+    const { onChangeInput } = this.props;
+    let { id } = this.props;
     if (id.includes('0')) id = id.replace('0', '');
-    onChangeInput(+newValue, id);
+    onChangeInput(newValue, id);
   };
 
   render() {
@@ -40,6 +47,7 @@ export default class InputWithMask extends Component {
           type="text"
           value={`${mask} ${value || defaultValue}`}
           onChange={this.onInputChange}
+          onBlur={this.onBlur}
           placeholder={defaultValue}
           className="text-input--input"
         />
@@ -47,3 +55,10 @@ export default class InputWithMask extends Component {
     );
   }
 }
+
+InputWithMask.propTypes = {
+  label: PropTypes.string.isRequired,
+  mask: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  onChangeInput: PropTypes.func.isRequired,
+};

@@ -4,12 +4,41 @@ import Lease from '../lease';
 import Loan from '../loan';
 import './calculator.scss';
 
-const Calculator = ({ onChangeInput, values }) => {
+const Calculator = ({ onChangeInput, onChangeTab, values, fields, isLoan }) => {
+  const {
+    zip,
+    tradeInValue,
+    downPayment,
+    approxCreditScore,
+    termForMonthLease,
+    termForMonthLoan,
+    annualMiles,
+    apr,
+  } = fields;
+  const fieldsForLoan = {
+    zip,
+    tradeInValue,
+    downPayment,
+    apr,
+    approxCreditScore,
+    termForMonthLoan,
+  };
+  const fieldsForLease = {
+    zip,
+    tradeInValue,
+    downPayment,
+    approxCreditScore,
+    termForMonthLease,
+    annualMiles,
+  };
   return (
     <div className="calculator">
-      <CalculatorButtons />
-      <Lease onChangeInput={onChangeInput} defaultValues={values} />
-      <Loan onChangeInput={onChangeInput} defaultValues={values} />
+      <CalculatorButtons isLoan={isLoan} onChangeTab={onChangeTab} />
+      {isLoan ? (
+        <Loan onChangeInput={onChangeInput} defaultValues={values} fields={fieldsForLoan} />
+      ) : (
+        <Lease onChangeInput={onChangeInput} defaultValues={values} fields={fieldsForLease} />
+      )}
     </div>
   );
 };

@@ -3,12 +3,6 @@ import PropTypes from 'prop-types';
 import './input-select.scss';
 
 export default class InputSelect extends Component {
-  PropTypes = {
-    label: PropTypes.string,
-    defaultValue: PropTypes.number,
-    availableValues: PropTypes.arrayOf(PropTypes.number),
-  };
-
   state = { value: '' };
 
   onInputChange = e => {
@@ -47,3 +41,11 @@ export default class InputSelect extends Component {
     );
   }
 }
+
+InputSelect.propTypes = {
+  label: PropTypes.string.isRequired,
+  defaultValue: PropTypes.number.isRequired,
+  availableValues: PropTypes.arrayOf(PropTypes.number).isRequired,
+  id: PropTypes.string.isRequired,
+  onChangeInput: PropTypes.func.isRequired,
+};
